@@ -25,43 +25,55 @@
 
 @layer components {
   .bali-card {
-    @apply bg-white rounded-[2rem] shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-black/5 overflow-hidden transition-all duration-500 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1;
+    @apply bg-white rounded-[2.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.02)] border border-black/[0.03] overflow-hidden transition-all duration-700 hover:shadow-[0_30px_60px_rgba(0,0,0,0.12)] hover:-translate-y-2;
   }
 
   .bali-btn {
-    @apply rounded-full px-8 py-3.5 font-display text-xs font-semibold uppercase tracking-widest transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
+    @apply rounded-full px-10 py-4 font-display text-[10px] font-bold uppercase tracking-[0.25em] transition-all duration-500 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3;
   }
 
   .bali-btn-primary {
-    @apply bg-bali-orange text-white shadow-lg shadow-bali-orange/20 hover:bg-bali-orange/90 hover:shadow-xl hover:shadow-bali-orange/30;
+    @apply bg-bali-orange text-white shadow-2xl shadow-bali-orange/20 hover:bg-bali-orange/90 hover:shadow-bali-orange/40 hover:-translate-y-0.5;
   }
 
   .bali-btn-secondary {
-    @apply bg-bali-olive text-white shadow-lg shadow-bali-olive/20 hover:bg-bali-olive/90 hover:shadow-xl hover:shadow-bali-olive/30;
+    @apply bg-bali-olive text-white shadow-2xl shadow-bali-olive/20 hover:bg-bali-olive/90 hover:shadow-bali-olive/40 hover:-translate-y-0.5;
   }
 
   .bali-btn-outline {
-    @apply border border-bali-olive/30 text-bali-olive hover:border-bali-olive hover:bg-bali-olive/5;
+    @apply border border-bali-olive/20 text-bali-olive hover:border-bali-olive hover:bg-bali-olive/5 hover:-translate-y-0.5;
   }
 
   .bali-input {
-    @apply w-full px-6 py-4 rounded-2xl bg-white border border-black/5 focus:outline-none focus:ring-2 focus:ring-bali-orange/10 transition-all duration-300 placeholder:text-zinc-400;
+    @apply w-full px-7 py-5 rounded-[1.5rem] bg-white border border-black/[0.05] focus:outline-none focus:ring-4 focus:ring-bali-orange/5 focus:border-bali-orange/20 transition-all duration-500 placeholder:text-zinc-300 font-light text-sm;
   }
 
   .premium-label {
-    @apply font-display text-[10px] font-bold uppercase tracking-[0.2em] text-bali-olive/60 mb-2 block;
+    @apply font-display text-[9px] font-bold uppercase tracking-[0.3em] text-bali-olive/40 mb-3 block;
   }
 
   .glass-panel {
-    @apply bg-white/80 backdrop-blur-xl border border-white/20 shadow-xl;
+    @apply bg-white/70 backdrop-blur-2xl border border-white/40 shadow-2xl;
   }
 
   .section-title {
-    @apply text-4xl md:text-6xl font-serif italic mb-4 text-bali-olive;
+    @apply text-5xl md:text-7xl font-serif italic mb-6 text-bali-olive leading-[1.1];
   }
 
   .section-subtitle {
-    @apply font-display text-xs font-bold uppercase tracking-[0.3em] text-bali-orange mb-4 block;
+    @apply font-display text-[10px] font-bold uppercase tracking-[0.4em] text-bali-orange mb-6 block;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-bali-olive/10 rounded-full hover:bg-bali-olive/30 transition-colors;
   }
 }
 

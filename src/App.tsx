@@ -208,8 +208,22 @@ export default function App() {
             <h2 className="text-6xl md:text-9xl font-serif italic mb-8 leading-[0.9]">Authentic Flavors, <br/> Bali Vibes</h2>
             <p className="text-xl md:text-2xl font-light opacity-90 mb-12 max-w-2xl mx-auto leading-relaxed">Experience the best Pizza, Burgers, and Shakes in town. Freshly prepared with love, delivered to your door.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <a href="#menu" className="bali-btn bali-btn-primary text-sm px-12 py-5">Explore Menu</a>
-              <a href="#info" className="bali-btn bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20 text-sm px-12 py-5">Our Story</a>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" })}
+                className="bali-btn bali-btn-primary text-sm px-12 py-5"
+              >
+                Explore Menu
+              </motion.button>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => document.getElementById("info")?.scrollIntoView({ behavior: "smooth" })}
+                className="bali-btn bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20 text-sm px-12 py-5"
+              >
+                Our Story
+              </motion.button>
             </div>
           </motion.div>
         </div>
@@ -290,12 +304,19 @@ export default function App() {
         </AnimatePresence>
 
         {/* Category Filter */}
-        <div className="text-center mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
           <span className="section-subtitle">Our Selection</span>
           <h2 className="section-title">Explore the Menu</h2>
           <div className="flex flex-wrap gap-4 mt-10 justify-center">
             {["All", ...Object.values(Category)].map((cat) => (
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 key={cat}
                 onClick={() => setSelectedCategory(cat as any)}
                 className={`bali-btn text-[10px] px-8 py-3 ${
@@ -305,19 +326,22 @@ export default function App() {
                 }`}
               >
                 {cat}
-              </button>
+              </motion.button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Menu Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <motion.div 
+          layout
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+        >
           <AnimatePresence mode="popLayout">
             {filteredItems.map((item) => (
               <MenuItemCard key={item.id} item={item} onAdd={addToCart} />
             ))}
           </AnimatePresence>
-        </div>
+        </motion.div>
 
         {/* Info Section */}
         <section id="info" className="mt-48">
@@ -426,41 +450,49 @@ export default function App() {
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
               className="fixed right-0 top-0 h-full w-full max-w-md bg-bali-cream z-50 shadow-2xl flex flex-col"
             >
-              <div className="p-8 border-b border-black/5 flex items-center justify-between bg-white">
-                <div>
-                  <h3 className="text-2xl font-serif italic flex items-center gap-3">
+              <div className="p-8 border-b border-black/5 flex items-center justify-between bg-white relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-bali-orange/10" />
+                <div className="relative z-10">
+                  <h3 className="text-2xl font-serif italic flex items-center gap-3 text-bali-olive">
                     <ShoppingCart className="w-6 h-6 text-bali-orange" />
                     Your Cart
                   </h3>
-                  <p className="text-[10px] font-display font-bold uppercase tracking-widest text-bali-olive/40 mt-1">Review your selection</p>
+                  <p className="text-[10px] font-display font-bold uppercase tracking-[0.2em] text-bali-olive/30 mt-1">Review your selection</p>
                 </div>
                 <button 
                   onClick={() => setIsCartOpen(false)}
-                  className="p-3 hover:bg-bali-cream rounded-full transition-colors"
+                  className="p-3 hover:bg-bali-cream rounded-full transition-all duration-300 hover:rotate-90 text-bali-olive/40 hover:text-bali-olive"
                 >
                   <X className="w-6 h-6" />
                 </button>
               </div>
 
-              <div className="flex-grow overflow-y-auto p-8 space-y-8">
+              <div className="flex-grow overflow-y-auto p-8 space-y-10 custom-scrollbar">
                 {cart.length === 0 ? (
-                  <div className="h-full flex flex-col items-center justify-center text-center py-12">
-                    <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-6 shadow-sm">
-                      <ShoppingCart className="w-10 h-10 text-bali-olive/20" />
-                    </div>
-                    <p className="text-xl font-serif italic text-bali-olive/60">Your cart is empty</p>
+                  <div className="h-full flex flex-col items-center justify-center text-center py-20">
+                    <motion.div 
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      className="w-32 h-32 bg-white rounded-full flex items-center justify-center mb-8 shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-bali-olive/5"
+                    >
+                      <ShoppingCart className="w-12 h-12 text-bali-olive/10" />
+                    </motion.div>
+                    <p className="text-2xl font-serif italic text-bali-olive/40">Your cart is empty</p>
                     {lastOrder && (
-                      <button 
+                      <motion.button 
+                        initial={{ y: 10, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.2 }}
                         onClick={repeatLastOrder}
-                        className="mt-6 flex items-center gap-2 text-bali-orange font-display text-[10px] font-bold uppercase tracking-widest hover:opacity-80 transition-opacity"
+                        className="mt-8 flex items-center gap-3 text-bali-orange font-display text-[10px] font-bold uppercase tracking-[0.3em] hover:opacity-70 transition-all group"
                       >
-                        <RotateCcw className="w-4 h-4" />
+                        <RotateCcw className="w-4 h-4 group-hover:-rotate-180 transition-transform duration-500" />
                         Repeat Last Order
-                      </button>
+                      </motion.button>
                     )}
                     <button 
                       onClick={() => setIsCartOpen(false)}
-                      className="mt-4 text-bali-olive/40 font-display text-[10px] font-bold uppercase tracking-widest hover:text-bali-olive transition-colors"
+                      className="mt-6 text-bali-olive/30 font-display text-[10px] font-bold uppercase tracking-[0.2em] hover:text-bali-olive transition-colors"
                     >
                       Start adding items
                     </button>
@@ -472,36 +504,39 @@ export default function App() {
                         {cart.map((item, idx) => (
                           <motion.div 
                             layout
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
+                            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, x: -50, scale: 0.9 }}
+                            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                             key={`${item.id}-${idx}`} 
-                            className="bali-card p-5 flex gap-5"
+                            className="bali-card p-5 flex gap-6 bg-white/50 backdrop-blur-sm hover:bg-white transition-colors border-bali-olive/5"
                           >
-                            <img 
-                              src={item.image} 
-                              alt={item.name} 
-                              className="w-24 h-24 rounded-2xl object-cover flex-shrink-0 shadow-sm"
-                              referrerPolicy="no-referrer"
-                            />
+                            <div className="relative group/img">
+                              <img 
+                                src={item.image} 
+                                alt={item.name} 
+                                className="w-24 h-24 rounded-2xl object-cover flex-shrink-0 shadow-md transition-transform duration-500 group-hover/img:scale-105"
+                                referrerPolicy="no-referrer"
+                              />
+                            </div>
                             <div className="flex-grow">
                               <div className="flex justify-between items-start mb-1">
-                                <h4 className="text-lg font-serif italic">{item.name}</h4>
+                                <h4 className="text-lg font-serif italic text-bali-olive">{item.name}</h4>
                                 <button 
                                   onClick={() => removeFromCart(item.id, item.customNote)}
-                                  className="text-zinc-300 hover:text-bali-orange transition-colors p-1"
+                                  className="text-zinc-300 hover:text-bali-orange transition-colors p-1.5 hover:bg-bali-orange/5 rounded-full"
                                 >
-                                  <X className="w-4 h-4" />
+                                  <X className="w-3.5 h-3.5" />
                                 </button>
                               </div>
-                              <p className="text-xs font-display font-bold text-bali-olive/40 mb-4 tracking-wider">PKR {item.price}</p>
+                              <p className="text-[10px] font-display font-bold text-bali-olive/30 mb-4 tracking-widest uppercase">PKR {item.price}</p>
                               {item.customNote && (
-                                <div className="bg-bali-cream/50 p-2 rounded-lg mb-4">
-                                  <p className="text-[10px] italic text-bali-orange leading-tight">Note: {item.customNote}</p>
+                                <div className="bg-bali-cream/40 p-3 rounded-xl mb-4 border border-bali-olive/5">
+                                  <p className="text-[10px] italic text-bali-orange leading-relaxed font-light">Note: {item.customNote}</p>
                                 </div>
                               )}
                               <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-4 bg-bali-cream rounded-full px-4 py-1.5">
+                                <div className="flex items-center gap-5 bg-bali-cream/80 rounded-full px-4 py-2 border border-bali-olive/5">
                                   <button 
                                     onClick={() => updateQuantity(item.id, -1, item.customNote)}
                                     className="text-bali-olive hover:text-bali-orange transition-colors"
@@ -510,9 +545,9 @@ export default function App() {
                                   </button>
                                   <motion.span 
                                     key={item.quantity}
-                                    initial={{ scale: 1.2 }}
-                                    animate={{ scale: 1 }}
-                                    className="font-bold text-sm min-w-[12px] text-center"
+                                    initial={{ scale: 1.2, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    className="font-bold text-xs min-w-[14px] text-center text-bali-olive"
                                   >
                                     {item.quantity}
                                   </motion.span>
@@ -523,7 +558,7 @@ export default function App() {
                                     <Plus className="w-3 h-3" />
                                   </button>
                                 </div>
-                                <span className="ml-auto font-serif italic text-lg">PKR {item.price * item.quantity}</span>
+                                <span className="ml-auto font-serif italic text-xl text-bali-olive">PKR {item.price * item.quantity}</span>
                               </div>
                             </div>
                           </motion.div>
@@ -531,51 +566,54 @@ export default function App() {
                       </AnimatePresence>
                     </div>
 
-                    <div className="pt-8 border-t border-black/5 space-y-6">
+                    <div className="pt-10 border-t border-bali-olive/5 space-y-8">
                       <div className="flex items-center justify-between">
-                        <h4 className="font-serif text-2xl italic">Checkout</h4>
-                        <div className="flex items-center gap-2 text-bali-orange bg-bali-orange/5 px-4 py-2 rounded-full border border-bali-orange/10">
+                        <div>
+                          <h4 className="font-serif text-3xl italic text-bali-olive">Checkout</h4>
+                          <p className="text-[10px] font-display font-bold uppercase tracking-[0.2em] text-bali-olive/30 mt-1">Delivery Information</p>
+                        </div>
+                        <div className="flex items-center gap-3 text-bali-orange bg-bali-orange/5 px-5 py-2.5 rounded-full border border-bali-orange/10 shadow-sm">
                           <Clock className="w-4 h-4" />
                           <span className="font-display text-[10px] font-bold uppercase tracking-widest">Est: {estimatedDeliveryTime} mins</span>
                         </div>
                       </div>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="premium-label">Full Name</label>
+                      <div className="grid grid-cols-1 gap-6">
+                        <div className="space-y-2">
+                          <label className="premium-label ml-1">Full Name</label>
                           <input 
                             type="text" 
                             placeholder="e.g. John Doe"
-                            className="bali-input"
+                            className="bali-input shadow-sm hover:shadow-md focus:shadow-lg"
                             value={customerInfo.name}
                             onChange={(e) => setCustomerInfo({ ...customerInfo, name: e.target.value })}
                           />
                         </div>
-                        <div>
-                          <label className="premium-label">Phone Number</label>
+                        <div className="space-y-2">
+                          <label className="premium-label ml-1">Phone Number</label>
                           <input 
                             type="tel" 
                             placeholder="e.g. +92 300 1234567"
-                            className="bali-input"
+                            className="bali-input shadow-sm hover:shadow-md focus:shadow-lg"
                             value={customerInfo.phone}
                             onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
                           />
                         </div>
-                        <div>
-                          <label className="premium-label">Delivery Address</label>
+                        <div className="space-y-2">
+                          <label className="premium-label ml-1">Delivery Address</label>
                           <textarea 
                             placeholder="House #, Street, Area"
                             rows={2}
-                            className="bali-input resize-none"
+                            className="bali-input resize-none shadow-sm hover:shadow-md focus:shadow-lg"
                             value={customerInfo.address}
                             onChange={(e) => setCustomerInfo({ ...customerInfo, address: e.target.value })}
                           />
                         </div>
-                        <div>
-                          <label className="premium-label">Order Note</label>
+                        <div className="space-y-2">
+                          <label className="premium-label ml-1">Order Note (Optional)</label>
                           <textarea 
                             placeholder="Any special instructions?"
                             rows={2}
-                            className="bali-input resize-none"
+                            className="bali-input resize-none shadow-sm hover:shadow-md focus:shadow-lg"
                             value={customerInfo.orderNote}
                             onChange={(e) => setCustomerInfo({ ...customerInfo, orderNote: e.target.value })}
                           />
@@ -587,20 +625,25 @@ export default function App() {
               </div>
 
               {cart.length > 0 && (
-                <div className="p-8 bg-white border-t border-black/5 space-y-6 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
-                  <div className="flex justify-between items-center">
-                    <span className="font-display text-xs font-bold uppercase tracking-[0.2em] text-bali-olive/40">Total Amount</span>
-                    <span className="text-3xl font-serif italic text-bali-orange">PKR {totalAmount}</span>
+                <div className="p-8 bg-white border-t border-black/5 space-y-6 shadow-[0_-20px_60px_rgba(0,0,0,0.08)] relative z-10">
+                  <div className="flex justify-between items-end">
+                    <div>
+                      <span className="font-display text-[10px] font-bold uppercase tracking-[0.3em] text-bali-olive/30 block mb-1">Total Amount</span>
+                      <span className="text-sm text-bali-olive/40 font-light italic">Including delivery fees</span>
+                    </div>
+                    <span className="text-4xl font-serif italic text-bali-orange">PKR {totalAmount}</span>
                   </div>
-                  <button 
+                  <motion.button 
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={placeOrder}
                     disabled={!customerInfo.name || !customerInfo.phone || !customerInfo.address}
-                    className="w-full bali-btn bali-btn-primary py-5 text-sm"
+                    className="w-full bali-btn bali-btn-primary py-5 text-sm shadow-xl shadow-bali-orange/30 group"
                   >
-                    <MessageCircle className="w-6 h-6" />
+                    <MessageCircle className="w-6 h-6 group-hover:rotate-12 transition-transform" />
                     Place Order via WhatsApp
-                  </button>
-                  <p className="text-center text-[10px] font-display font-bold uppercase tracking-widest text-bali-olive/30">Secure checkout via WhatsApp</p>
+                  </motion.button>
+                  <p className="text-center text-[9px] font-display font-bold uppercase tracking-[0.3em] text-bali-olive/20">Secure checkout via WhatsApp Business</p>
                 </div>
               )}
             </motion.div>
@@ -627,81 +670,114 @@ function MenuItemCard({ item, onAdd }: { item: MenuItem; onAdd: (item: MenuItem,
   return (
     <motion.div 
       layout
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      className="bali-card flex flex-col h-full group"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="bali-card flex flex-col h-full group relative"
     >
-      <div className="relative h-72 overflow-hidden">
+      <div className="relative h-80 overflow-hidden rounded-t-[2rem]">
         <img 
           src={item.image} 
           alt={item.name} 
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        
+        {/* Quick Add Overlay (Desktop) */}
+        <div className="absolute inset-0 bg-bali-olive/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center gap-4">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleAdd}
+            className="bali-btn bg-white text-bali-olive hover:bg-bali-orange hover:text-white border-none text-[10px] px-6 py-3 shadow-2xl"
+          >
+            <Plus className="w-4 h-4" />
+            Quick Add
+          </motion.button>
+        </div>
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
         
         {item.isPopular && (
-          <div className="absolute top-6 left-6 bg-bali-orange text-white text-[10px] font-display font-bold px-4 py-1.5 rounded-full flex items-center gap-2 shadow-xl backdrop-blur-md">
+          <div className="absolute top-6 left-6 bg-bali-orange text-white text-[10px] font-display font-bold px-4 py-1.5 rounded-full flex items-center gap-2 shadow-xl backdrop-blur-md z-10">
             <Star className="w-3 h-3 fill-current" />
             POPULAR
           </div>
         )}
-        <div className="absolute bottom-6 right-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl font-serif italic text-xl text-bali-olive shadow-xl">
-          PKR {item.price}
+        <div className="absolute bottom-6 right-6 bg-white/95 backdrop-blur-md px-5 py-2.5 rounded-2xl font-serif italic text-2xl text-bali-olive shadow-2xl z-10 border border-white/20">
+          <span className="text-xs font-display font-bold uppercase tracking-tighter mr-1 opacity-40">PKR</span>
+          {item.price}
         </div>
       </div>
       
-      <div className="p-8 flex flex-col flex-grow">
+      <div className="p-8 flex flex-col flex-grow bg-white rounded-b-[2rem]">
         <div className="mb-4">
-          <span className="font-display text-[10px] font-bold uppercase tracking-widest text-bali-orange mb-1 block">{item.category}</span>
-          <h3 className="text-2xl font-serif italic">{item.name}</h3>
+          <span className="font-display text-[10px] font-bold uppercase tracking-[0.2em] text-bali-orange mb-1 block">{item.category}</span>
+          <h3 className="text-2xl font-serif italic text-bali-olive group-hover:text-bali-orange transition-colors duration-300">{item.name}</h3>
         </div>
-        <p className="text-zinc-500 text-sm font-light leading-relaxed mb-8 flex-grow">{item.description}</p>
+        <p className="text-zinc-500 text-sm font-light leading-relaxed mb-8 flex-grow line-clamp-2">{item.description}</p>
         
         <div className="space-y-6">
           <div className="relative">
             <input 
               type="text" 
               placeholder="Special instructions..."
-              className="w-full text-xs px-5 py-3 rounded-2xl bg-bali-cream/50 border border-black/5 focus:outline-none focus:ring-2 focus:ring-bali-orange/10 transition-all placeholder:text-zinc-400"
+              className="w-full text-xs px-5 py-3.5 rounded-2xl bg-bali-cream/30 border border-bali-olive/5 focus:outline-none focus:ring-2 focus:ring-bali-orange/10 transition-all placeholder:text-zinc-400 font-light"
               value={note}
               onChange={(e) => setNote(e.target.value)}
             />
           </div>
           
           <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-5 bg-bali-cream rounded-full px-5 py-2">
+            <div className="flex items-center gap-5 bg-bali-cream/50 rounded-full px-5 py-2.5 border border-bali-olive/5">
               <button 
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="text-bali-olive hover:text-bali-orange transition-colors"
+                className="text-bali-olive hover:text-bali-orange transition-colors p-1"
               >
-                <Minus className="w-4 h-4" />
+                <Minus className="w-3.5 h-3.5" />
               </button>
-              <span className="font-bold text-sm min-w-[20px] text-center">{quantity}</span>
+              <span className="font-bold text-sm min-w-[20px] text-center text-bali-olive">{quantity}</span>
               <button 
                 onClick={() => setQuantity(quantity + 1)}
-                className="text-bali-olive hover:text-bali-orange transition-colors"
+                className="text-bali-olive hover:text-bali-orange transition-colors p-1"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-3.5 h-3.5" />
               </button>
             </div>
             
             <button 
               onClick={handleAdd}
               disabled={isAdding}
-              className={`bali-btn flex-grow py-4 shadow-none ${
+              className={`bali-btn flex-grow py-4 shadow-none relative overflow-hidden group/btn ${
                 isAdding ? "bg-emerald-500 text-white" : "bali-btn-secondary"
               }`}
             >
-              {isAdding ? (
-                <>Added to Cart</>
-              ) : (
-                <>
-                  <Plus className="w-4 h-4" />
-                  Add to Cart
-                </>
-              )}
+              <AnimatePresence mode="wait">
+                {isAdding ? (
+                  <motion.span
+                    key="added"
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -20, opacity: 0 }}
+                    className="flex items-center gap-2"
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    Added
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="add"
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -20, opacity: 0 }}
+                    className="flex items-center gap-2"
+                  >
+                    <Plus className="w-4 h-4 transition-transform group-hover/btn:rotate-90" />
+                    Add to Cart
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </button>
           </div>
         </div>
